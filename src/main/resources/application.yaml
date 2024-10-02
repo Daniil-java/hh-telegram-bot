@@ -1,5 +1,5 @@
 server:
-  port: 8114
+  port: 8115
 
 spring:
   application:
@@ -8,7 +8,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     password: password
     username: postgres
-    url: jdbc:postgresql://localhost:5435/hh_telegram_bot
+    url: jdbc:postgresql://localhost:5435/hh_telegram
   jpa:
     database: postgresql
     properties:
@@ -17,7 +17,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 bot:
-  name:
+  name: workhunttg_bot
 
 feign:
   client:
@@ -32,7 +32,4 @@ integrations:
   read-timeout: 1000000
   write-timeout: 5000
   openai-api:
-    url: https://api.openai.com/v1/
-
-locale:
-  tag: ru-RU
+    url: https://api.hh.ru/vacancies/
