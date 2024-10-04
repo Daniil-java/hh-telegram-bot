@@ -7,11 +7,11 @@ services:
     image: postgres:15.3
     domainname: postgres
     ports:
-      - "5435:5434"
+      - "5435:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=hh_telegram_bot
+      - POSTGRES_DB=hh_telegram
     healthcheck:
       test: ["CMD", "pg_isready", "-q", "-U", "postgres"]
       interval: 5s
