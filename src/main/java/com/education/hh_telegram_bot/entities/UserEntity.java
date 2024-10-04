@@ -25,7 +25,7 @@ public class UserEntity {
     private String lastname;
     private String languageCode;
     @OneToMany(mappedBy="user")
-    private Set<Link> links;
+    private Set<WorkFilter> workFilters;
     @CreationTimestamp
     private LocalDateTime created;
 

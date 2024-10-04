@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users
     created         timestamp
 );
 
-CREATE TABLE IF NOT EXISTS links
+CREATE TABLE IF NOT EXISTS work_filters
 (
     id              serial PRIMARY KEY,
     user_id         bigint NOT NULL,
@@ -37,9 +37,9 @@ CREATE TABLE IF NOT EXISTS vacancies
     key_skills      text,
     salary          text,
     schedule        text,
-    link_id         bigint NOT NULL,
+    work_filter_id         bigint NOT NULL,
     created         timestamp,
-    CONSTRAINT fk_link FOREIGN KEY (link_id) REFERENCES links(id)
+    CONSTRAINT fk_work_filter FOREIGN KEY (work_filter_id) REFERENCES work_filters(id)
     );
 
 CREATE INDEX telegram_id ON users(telegram_id);

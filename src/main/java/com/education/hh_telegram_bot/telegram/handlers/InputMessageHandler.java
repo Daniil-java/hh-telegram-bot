@@ -1,9 +1,9 @@
 package com.education.hh_telegram_bot.telegram.handlers;
 
-import com.education.hh_telegram_bot.entities.Link;
+import com.education.hh_telegram_bot.entities.WorkFilter;
 import com.education.hh_telegram_bot.entities.UserEntity;
 import com.education.hh_telegram_bot.entities.Vacancy;
-import com.education.hh_telegram_bot.services.LinkService;
+import com.education.hh_telegram_bot.services.WorkFilterService;
 import com.education.hh_telegram_bot.services.VacancyService;
 import com.education.hh_telegram_bot.telegram.TelegramBot;
 import org.jsoup.Jsoup;
@@ -23,7 +23,7 @@ import java.util.List;
 @Component
 public class InputMessageHandler {
     @Autowired
-    private LinkService linkService;
+    private WorkFilterService workFilterService;
     @Autowired
     private VacancyService vacancyService;
     @Autowired
@@ -35,20 +35,14 @@ public class InputMessageHandler {
         String url = message.getText();
         if (isValidated(url)) {
             try {
-                Link link = linkService.save(userEntity.getId(), url);
+                WorkFilter workFilter = workFilterService.save(userEntity.getId(), url);
                 List<String> vacancyUrlsList = parseVacanciesUrl(url);
-                List<Vacancy> vacanciesList = vacancyService.saveAll(link.getId(), vacancyUrlsList);
-                //TODO: Убрать заглушку
+                List<Vacancy> vacanciesList = vacancyService.saveAll(workFilter.getId(), vacancyUrlsList);
+                //TODO: Временная реализация
                 telegramBot.sendMessage(SendMessage.builder()
                         .chatId(chatId)
                         .text(vacanciesList.get(0).toString())
                         .build());
-//                for (Vacancy vacancy : vacanciesList) {
-//                    telegramBot.sendMessage(SendMessage.builder()
-//                            .chatId(chatId)
-//                            .text(vacancy.toString())
-//                            .build());
-//                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

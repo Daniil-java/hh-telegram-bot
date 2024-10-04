@@ -30,21 +30,10 @@ public class Vacancy {
     private String salary;
     private String schedule;
     @ManyToOne
-    @JoinColumn(name="link_id")
-    private Link link;
+    @JoinColumn(name="work_filter_id")
+    private WorkFilter workFilter;
     @CreationTimestamp
     private LocalDateTime created;
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(url).append("\n");
-        builder.append(name).append("\n");
-        builder.append(experience).append("\n");
-        builder.append(employment).append("\n");
-        builder.append(salary);
-        return builder.toString();
-    }
 
     public static Vacancy convertDtoToVacancy(HhResponseDto responseDto) {
         Vacancy vacancy = new Vacancy()

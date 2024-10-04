@@ -10,18 +10,18 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "links")
+@Table(name = "work_filters")
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-public class Link {
+public class WorkFilter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     @JoinColumn(name="user_id")
     private UserEntity user;
-    @OneToMany(mappedBy = "link")
+    @OneToMany(mappedBy = "workFilter")
     private Set<Vacancy> vacancies;
     private String url;
     @CreationTimestamp

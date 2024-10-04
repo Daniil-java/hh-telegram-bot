@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 @FeignClient(
         value = "hh-feign-client",
-        url = "${integrations.openai-api.url}"
+        url = "${integrations.hh-api.url}"
 )
 public interface HhFeignClient {
 
