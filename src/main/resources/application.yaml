@@ -33,3 +33,5 @@ integrations:
   write-timeout: 5000
   hh-api:
     url: https://api.hh.ru/vacancies/
+  openai-api:
+    url: https://api.openai.com/v1/

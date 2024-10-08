@@ -1,4 +1,4 @@
-package com.education.hh_telegram_bot.services;
+package com.education.hh_telegram_bot.services.feign;
 
 import com.education.hh_telegram_bot.entities.Vacancy;
 import com.education.hh_telegram_bot.integrations.HhFeignClient;
@@ -14,7 +14,7 @@ public class HhApiFeignService {
 
     private final HhFeignClient hhFeignClient;
 
-    public Vacancy getVacancyById(String vacancyId) {
+    public Vacancy getVacancyByHhId(String vacancyId) {
         return Vacancy.convertDtoToVacancy(hhFeignClient.getVacancyById(vacancyId));
     }
 

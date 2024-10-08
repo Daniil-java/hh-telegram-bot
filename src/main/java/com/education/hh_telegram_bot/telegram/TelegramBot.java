@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.List;
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
     @Value("${bot.name}")
@@ -31,6 +32,17 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void sendMessage(BotApiMethod sendMessage) {
         try {
             execute(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendAllMessages(List<BotApiMethod> sendMessages) throws InterruptedException {
+        try {
+            for (BotApiMethod message: sendMessages) {
+                execute(message);
+                Thread.sleep(1000);
+            }
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
