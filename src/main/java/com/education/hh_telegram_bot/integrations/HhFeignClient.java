@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.*;
 public interface HhFeignClient {
 
     @GetMapping("/{vacancyId}")
-    HhResponseDto getVacancyById(@PathVariable String vacancyId);
+    HhResponseDto getVacancyById(@PathVariable Long vacancyId);
 }

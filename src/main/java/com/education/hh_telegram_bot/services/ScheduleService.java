@@ -19,7 +19,7 @@ public class ScheduleService {
     private final NotificationScheduleProcessor notificationScheduleProcessor;
 
     //TODO: Шедулеры требует пересмотра времени срабатывания
-    @Scheduled(cron = "0 0/30 * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?", initialDelay = 1000)
     public void workFilterScheduleProcess() {
         getInfo(workFilterScheduleProcessor.getSchedulerName());
         workFilterScheduleProcessor.process();

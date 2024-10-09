@@ -8,9 +8,9 @@ import java.util.List;
 
 @Repository
 public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
-    List<Vacancy> findAllByGeneratedDescriptionNull();
+    List<Vacancy> findAllByGeneratedDescriptionIsNull();
 
-    List<Vacancy> findAllByNameNull();
+    List<Vacancy> findAllByNameIsNull();
 
     List<Vacancy> findAllByIsSentFalseAndWorkFilterId(long workFilterId);
 }

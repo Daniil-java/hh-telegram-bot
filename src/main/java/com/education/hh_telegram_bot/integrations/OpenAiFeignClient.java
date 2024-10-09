@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
         url = "${integrations.openai-api.url}"
 )
 public interface OpenAiFeignClient {
-    @PostMapping("chat/completions")
+    @PostMapping("/chat/completions")
     OpenAiChatCompletionResponse generate(@RequestHeader("Authorization") String key,
                                           @RequestBody OpenAiChatCompletionRequest request);
 }

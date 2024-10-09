@@ -2,6 +2,7 @@ package com.education.hh_telegram_bot.telegram;
 
 import com.education.hh_telegram_bot.telegram.configurations.TelegramBotKeyComponent;
 import com.education.hh_telegram_bot.telegram.facades.MessageFacade;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -12,8 +13,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.List;
 @Component
+@Slf4j
 public class TelegramBot extends TelegramLongPollingBot {
     @Value("${bot.name}")
     private String botName;
@@ -33,18 +34,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void sendAllMessages(List<BotApiMethod> sendMessages) throws InterruptedException {
-        try {
-            for (BotApiMethod message: sendMessages) {
-                execute(message);
-                Thread.sleep(1000);
-            }
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
+            log.error(getClass().getSimpleName(), e);
         }
     }
 
@@ -52,7 +42,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             return execute(sendMessage);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            log.error(getClass().getSimpleName());
         }
         return null;
     }
