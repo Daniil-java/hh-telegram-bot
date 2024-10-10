@@ -13,4 +13,5 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
     List<Vacancy> findAllByNameIsNull();
 
     List<Vacancy> findAllByIsSentFalseAndWorkFilterId(long workFilterId);
+    List<Vacancy> findAllByIsSent(boolean bool);
 }

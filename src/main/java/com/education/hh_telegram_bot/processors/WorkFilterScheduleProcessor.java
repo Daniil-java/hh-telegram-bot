@@ -7,6 +7,7 @@ import com.education.hh_telegram_bot.entities.WorkFilter;
 import com.education.hh_telegram_bot.services.UserService;
 import com.education.hh_telegram_bot.services.VacancyService;
 import com.education.hh_telegram_bot.services.WorkFilterService;
+import com.education.hh_telegram_bot.utils.ThreadUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -40,29 +41,14 @@ public class WorkFilterScheduleProcessor implements ScheduleProcessor{
         }
         List<Vacancy> vacancyList = new ArrayList<>();
         for (WorkFilter workFilter: workFilterList) {
-            vacancyList.addAll(parseVacanciesUrl(workFilter));
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                log.error(getClass().getSimpleName(), e);
-            }
-        }
-        int countException = 0;
-        for (Vacancy vacancy: vacancyList) {
-            if (countException > MAX_EXCEPTION) {
-                log.error(getClass().getSimpleName() + " terminated due to errors");
-                break;
-            }
-            try {
+            for (Vacancy vacancy: loadAndParseHhVacancies(workFilter)) {
                 vacancyService.save(vacancy);
-            } catch (Exception e) {
-                log.error(getClass().getSimpleName(), e);
-                countException++;
             }
+            ThreadUtil.sleep(1000, "WorkFilterScheduler: thread sleep error");
         }
     }
 
-    private List<Vacancy> parseVacanciesUrl(WorkFilter workFilter) {
+    private List<Vacancy> loadAndParseHhVacancies(WorkFilter workFilter) {
         String url = workFilter.getUrl();
         ArrayList<Vacancy> vacanciesUrlList = new ArrayList<>();
         try {
@@ -81,7 +67,7 @@ public class WorkFilterScheduleProcessor implements ScheduleProcessor{
             }
             return vacanciesUrlList;
         } catch (IOException e) {
-            log.error(getClass().getSimpleName(), e);
+            log.error("WorkFilterScheduleProcessor: Jsoup connection error!", e);
         }
         return vacanciesUrlList;
     }

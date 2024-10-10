@@ -25,7 +25,7 @@ public class OpenAiScheduleProcessor implements ScheduleProcessor {
         int countException = 0;
         for (Vacancy vacancy: vacancyList) {
             if (countException > MAX_EXCEPTION) {
-                log.error(getClass().getSimpleName() + " terminated due to errors");
+                log.error("OpenAiScheduleProcessor: terminated due to errors");
                 break;
             }
             try {
@@ -33,7 +33,7 @@ public class OpenAiScheduleProcessor implements ScheduleProcessor {
                 vacancy.setGeneratedDescription(generatedDescription);
                 vacancyService.save(vacancy);
             } catch (Exception e) {
-                log.error(getClass().getSimpleName(), e);
+                log.error("OpenAiScheduleProcessor: generation error!", e);
                 countException++;
             }
         }

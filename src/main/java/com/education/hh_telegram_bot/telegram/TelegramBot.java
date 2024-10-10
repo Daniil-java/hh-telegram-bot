@@ -34,7 +34,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            log.error(getClass().getSimpleName(), e);
+            log.error("TelegramBot: send message error!", e);
         }
     }
 
@@ -42,7 +42,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             return execute(sendMessage);
         } catch (TelegramApiException e) {
-            log.error(getClass().getSimpleName());
+            log.error("TelegramBot: send returned message error!", e);
         }
         return null;
     }

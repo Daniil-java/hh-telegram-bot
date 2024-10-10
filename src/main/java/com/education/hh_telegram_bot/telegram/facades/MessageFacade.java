@@ -23,7 +23,7 @@ public class MessageFacade {
          На этапе разработки обработка сообщений
          происходит только от одного пользователя
          */
-        if (update.getMessage().getFrom().getId() == 425120436L) return;
+        if (update.getMessage().getFrom().getId() != 425120436L) return;
 
         if (update.hasCallbackQuery()) {
             handleInputCallback(update.getCallbackQuery());

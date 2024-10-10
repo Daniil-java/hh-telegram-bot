@@ -4,6 +4,7 @@ import com.education.hh_telegram_bot.entities.Vacancy;
 import com.education.hh_telegram_bot.entities.hh.HhResponseDto;
 import com.education.hh_telegram_bot.services.feign.HhApiFeignService;
 import com.education.hh_telegram_bot.services.VacancyService;
+import com.education.hh_telegram_bot.utils.ThreadUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class VacancyScheduleProcessor implements ScheduleProcessor {
         int countException = 0;
         for (Vacancy vacancy: vacancyList) {
             if (countException > MAX_EXCEPTION) {
-                log.error(getClass().getSimpleName() + " terminated due to errors");
+                log.error("VacancyScheduleProcessor: terminated due to errors");
                 break;
             }
             try {
@@ -37,8 +38,9 @@ public class VacancyScheduleProcessor implements ScheduleProcessor {
                         .setDescription(responseDto.getDescription());
 
                 vacancyService.save(vacancy);
+                ThreadUtil.sleep(100, "VacancySchedule: thread sleep error");
             } catch (Exception e) {
-                log.error(getClass().getName(), e);
+                log.error("VacancyScheduleProcessor: HH API error!", e);
                 countException++;
             }
         }

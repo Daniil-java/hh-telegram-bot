@@ -24,8 +24,12 @@ public class VacancyService {
         return vacancyRepository.findAllByGeneratedDescriptionIsNull();
     }
 
-    public List<Vacancy> getAllUnsentVacancies(Long workFilterId) {
+    public List<Vacancy> getAllUnsentVacanciesByWorkFilterId(Long workFilterId) {
         return vacancyRepository.findAllByIsSentFalseAndWorkFilterId(workFilterId);
+    }
+
+    public List<Vacancy> getAllVacanciesIfSentIs(boolean bool) {
+        return vacancyRepository.findAllByIsSent(bool);
     }
 
     public Vacancy save(Vacancy vacancy) {

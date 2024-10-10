@@ -7,6 +7,7 @@ import com.education.hh_telegram_bot.services.UserService;
 import com.education.hh_telegram_bot.services.VacancyService;
 import com.education.hh_telegram_bot.services.WorkFilterService;
 import com.education.hh_telegram_bot.telegram.TelegramBot;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @AllArgsConstructor
@@ -27,20 +29,24 @@ public class NotificationScheduleProcessor implements ScheduleProcessor{
     private final int MAX_EXCEPTION = 3;
 
     @Override
+    @Transactional
     public void process() {
         List<UserEntity> userEntityList = userService.getAllUsers();
         int countException = 0;
         for (UserEntity user: userEntityList) {
             if (countException > MAX_EXCEPTION) {
-                log.error(getClass().getSimpleName() + " terminated due to errors");
+                log.error("NotificationScheduleProcessor: terminated due to errors");
                 break;
             }
             try {
                 long chatId = user.getChatId();
                 List<Vacancy> vacancyList = new ArrayList<>();
-                List<WorkFilter> workFilters = workFilterService.getAllByUserId(user.getId());
+                Set<WorkFilter> workFilters = user.getWorkFilters();
                 for (WorkFilter workFilter: workFilters) {
-                    vacancyList.addAll(vacancyService.getAllUnsentVacancies(workFilter.getId()));
+                    vacancyList.addAll(
+                            vacancyService.getAllUnsentVacanciesByWorkFilterId(
+                                    workFilter.getId())
+                    );
                 }
                 for (Vacancy vacancy: vacancyList) {
                     Message message = telegramBot.sendReturnedMessage(
@@ -55,7 +61,7 @@ public class NotificationScheduleProcessor implements ScheduleProcessor{
                     }
                 }
             } catch (Exception e) {
-                log.error(getClass().getSimpleName(), e);
+                log.error("NotificationScheduleProcessor: telegram send message error!", e);
                 countException++;
             }
         }
