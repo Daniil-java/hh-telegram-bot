@@ -1,6 +1,6 @@
-package com.education.hh_telegram_bot.services;
+package com.education.hh_telegram_bot.services.feign;
 
-import com.education.hh_telegram_bot.entities.Vacancy;
+import com.education.hh_telegram_bot.entities.hh.HhResponseDto;
 import com.education.hh_telegram_bot.integrations.HhFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +14,8 @@ public class HhApiFeignService {
 
     private final HhFeignClient hhFeignClient;
 
-    public Vacancy getVacancyById(String vacancyId) {
-        return Vacancy.convertDtoToVacancy(hhFeignClient.getVacancyById(vacancyId));
+    public HhResponseDto getVacancyByHhId(Long vacancyId) {
+        return hhFeignClient.getVacancyById(vacancyId);
     }
 
 

@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.education</groupId>
 	<artifactId>hh-telegram-bot</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<name>hh-telegram-bot</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>

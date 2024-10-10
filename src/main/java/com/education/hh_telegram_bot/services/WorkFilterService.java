@@ -23,6 +23,10 @@ public class WorkFilterService {
         );
     }
 
+    public List<WorkFilter> getAllByUserId(long userId) {
+        return workFilterRepository.findAllByUserId(userId);
+    }
+
     public List<WorkFilter> saveAll(Long userId, List<String> urlList) {
         List<WorkFilter> list = new ArrayList<>();
         UserEntity user = new UserEntity().setId(userId);
@@ -32,5 +36,9 @@ public class WorkFilterService {
                     .setUrl(url));
         }
         return workFilterRepository.saveAll(list);
+    }
+
+    public List<WorkFilter> getAll() {
+        return workFilterRepository.findAll();
     }
 }

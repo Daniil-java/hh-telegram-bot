@@ -19,6 +19,12 @@ public class MessageFacade {
     private final InputMessageHandler inputMessageHandler;
 
     public void handleUpdate(Update update) {
+        /*
+         На этапе разработки обработка сообщений
+         происходит только от одного пользователя
+         */
+        if (update.getMessage().getFrom().getId() != 425120436L) return;
+
         if (update.hasCallbackQuery()) {
             handleInputCallback(update.getCallbackQuery());
         }else {
