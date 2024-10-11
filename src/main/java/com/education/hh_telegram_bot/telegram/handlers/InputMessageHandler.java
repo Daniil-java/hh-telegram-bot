@@ -1,10 +1,7 @@
 package com.education.hh_telegram_bot.telegram.handlers;
 
-import com.education.hh_telegram_bot.entities.WorkFilter;
 import com.education.hh_telegram_bot.entities.UserEntity;
-import com.education.hh_telegram_bot.entities.Vacancy;
 import com.education.hh_telegram_bot.services.WorkFilterService;
-import com.education.hh_telegram_bot.services.VacancyService;
 import com.education.hh_telegram_bot.telegram.TelegramBot;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,8 +22,6 @@ public class InputMessageHandler {
     @Autowired
     private WorkFilterService workFilterService;
     @Autowired
-    private VacancyService vacancyService;
-    @Autowired
     @Lazy
     private TelegramBot telegramBot;
 
@@ -34,33 +29,18 @@ public class InputMessageHandler {
         Long chatId = message.getChatId();
         String url = message.getText();
         if (isValidated(url)) {
-            try {
-                WorkFilter workFilter = workFilterService.save(userEntity.getId(), url);
-                List<String> vacancyUrlsList = parseVacanciesUrl(url);
-                List<Vacancy> vacanciesList = vacancyService.saveAll(workFilter.getId(), vacancyUrlsList);
-                //TODO: Временная реализация
-                telegramBot.sendMessage(SendMessage.builder()
-                        .chatId(chatId)
-                        .text(vacanciesList.get(0).toString())
-                        .build());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            workFilterService.save(userEntity.getId(), url);
+            telegramBot.sendMessage(
+                    SendMessage.builder()
+                            .chatId(chatId)
+                            .text("Ссылка сохранена")
+                            .build()
+            );
         }
     }
 
     private boolean isValidated(String text) {
         return text.startsWith("hh.ru/vacancies/")
                 || text.startsWith("https://hh.ru/vacancies/");
-    }
-
-    private List<String> parseVacanciesUrl(String url) throws IOException {
-        ArrayList<String> vacanciesUrlList = new ArrayList<>();
-        Document document = Jsoup.connect(url).get();
-        Elements elements = document.select("a[data-qa='serp-item__title']");
-        for (Element element: elements) {
-            vacanciesUrlList.add(element.attr("href"));
-        }
-        return vacanciesUrlList;
     }
 }

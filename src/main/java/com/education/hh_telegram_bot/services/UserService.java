@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,7 +16,6 @@ import java.util.Optional;
 @Slf4j
 public class UserService {
     private final UserRepository userRepository;
-
     @Transactional
     public UserEntity getOrCreateUser(User userInfo) {
         long telegramId = userInfo.getId();
@@ -33,5 +33,9 @@ public class UserService {
                     .setLanguageCode(userInfo.getLanguageCode())
             );
         }
+    }
+
+    public List<UserEntity> getAllUsers() {
+        return userRepository.findAll();
     }
 }
