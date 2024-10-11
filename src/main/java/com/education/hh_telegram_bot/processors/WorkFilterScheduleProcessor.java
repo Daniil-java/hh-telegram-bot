@@ -39,12 +39,11 @@ public class WorkFilterScheduleProcessor implements ScheduleProcessor{
             long userId = userEntity.getId();
             workFilterList.addAll(workFilterService.getAllByUserId(userId));
         }
-        List<Vacancy> vacancyList = new ArrayList<>();
         for (WorkFilter workFilter: workFilterList) {
             for (Vacancy vacancy: loadAndParseHhVacancies(workFilter)) {
                 vacancyService.save(vacancy);
             }
-            ThreadUtil.sleep(1000, "WorkFilterScheduler: thread sleep error");
+            ThreadUtil.sleep(1000);
         }
     }
 

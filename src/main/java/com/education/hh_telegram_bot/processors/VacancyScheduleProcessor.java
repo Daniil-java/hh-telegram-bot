@@ -38,7 +38,7 @@ public class VacancyScheduleProcessor implements ScheduleProcessor {
                         .setDescription(responseDto.getDescription());
 
                 vacancyService.save(vacancy);
-                ThreadUtil.sleep(100, "VacancySchedule: thread sleep error");
+                ThreadUtil.sleep(100);
             } catch (Exception e) {
                 log.error("VacancyScheduleProcessor: HH API error!", e);
                 countException++;

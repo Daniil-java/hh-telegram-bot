@@ -4,11 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ThreadUtil {
-    public static void sleep(int milliseconds, String logError) {
+    public static void sleep(int milliseconds) {
         try {
             Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
-            log.error(logError, e);
+            log.error("Thread sleep error!", e);
         }
     }
 }
