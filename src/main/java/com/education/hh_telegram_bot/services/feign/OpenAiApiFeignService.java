@@ -16,8 +16,9 @@ public class OpenAiApiFeignService {
     private final OpenAiKeyConfiguration openAiKeyConfiguration;
 
     public String generateDescription(String description) {
-
+        //Создание текста запроса для обращение к OpenAI API
         String request = String.format("Выдели суть из следующего описания: %s", description);
+        //Отправка запроса и получение ответа от ИИ
         OpenAiChatCompletionResponse response = openAiFeignClient.generate(
                         "Bearer " + openAiKeyConfiguration.getKey(),
                         OpenAiChatCompletionRequest.makeRequest(request)

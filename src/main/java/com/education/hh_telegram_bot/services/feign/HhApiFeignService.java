@@ -15,6 +15,7 @@ public class HhApiFeignService {
     private final HhFeignClient hhFeignClient;
 
     public HhResponseDto getVacancyByHhId(Long vacancyId) {
+        //Получение ДТО-вакансии по id, посредством обращения к api
         return hhFeignClient.getVacancyById(vacancyId);
     }
 

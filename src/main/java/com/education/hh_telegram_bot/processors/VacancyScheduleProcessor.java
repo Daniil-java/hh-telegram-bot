@@ -1,8 +1,6 @@
 package com.education.hh_telegram_bot.processors;
 
 import com.education.hh_telegram_bot.entities.Vacancy;
-import com.education.hh_telegram_bot.entities.hh.HhResponseDto;
-import com.education.hh_telegram_bot.services.feign.HhApiFeignService;
 import com.education.hh_telegram_bot.services.VacancyService;
 import com.education.hh_telegram_bot.utils.ThreadUtil;
 import lombok.AllArgsConstructor;
@@ -16,12 +14,14 @@ import java.util.List;
 @Slf4j
 public class VacancyScheduleProcessor implements ScheduleProcessor {
     private final VacancyService vacancyService;
-    private final HhApiFeignService hhApiFeignService;
-
     private final int MAX_EXCEPTION = 3;
+
     @Override
     public void process() {
+        //Загрузка необработанных вакансий
         List<Vacancy> vacancyList = vacancyService.getAllUnprocessedVacancies();
+
+        //Счетчик возникших исключений
         int countException = 0;
         for (Vacancy vacancy: vacancyList) {
             if (countException > MAX_EXCEPTION) {
@@ -29,15 +29,8 @@ public class VacancyScheduleProcessor implements ScheduleProcessor {
                 break;
             }
             try {
-                HhResponseDto responseDto = hhApiFeignService
-                        .getVacancyByHhId(vacancy.getHhId());
-
-                vacancy.setName(responseDto.getName())
-                        .setExperience(responseDto.getExperience().getName())
-                        .setEmployment(responseDto.getEmployment().getName())
-                        .setDescription(responseDto.getDescription());
-
-                vacancyService.save(vacancy);
+                //Обработка вакансий
+                vacancyService.fetchAndSaveEntity(vacancy);
                 ThreadUtil.sleep(100);
             } catch (Exception e) {
                 log.error("VacancyScheduleProcessor: HH API error!", e);

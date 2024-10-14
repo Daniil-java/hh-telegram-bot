@@ -31,8 +31,8 @@ public class Vacancy {
     private String keySkills;
     private String salary;
     private String schedule;
-    @Column(name = "is_sent")
-    private boolean isSent;
+    @Column(name = "notification_attempt_count")
+    private int notificationAttemptCount;
     @ManyToOne
     @JoinColumn(name="work_filter_id")
     private WorkFilter workFilter;
