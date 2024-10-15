@@ -19,11 +19,13 @@ public class ScheduleService {
     private final NotificationScheduleProcessor notificationScheduleProcessor;
 
     //TODO: Шедулеры требует пересмотра времени срабатывания
-    @Scheduled(cron = "0 0/30 * * * ?", initialDelay = 1000)
+//    @Scheduled(initialDelay = 1000)
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void workFilterScheduleProcess() {
         getInfo(workFilterScheduleProcessor.getSchedulerName());
         workFilterScheduleProcessor.process();
     }
+
 
     @Scheduled(cron = "0 0 * * * ?")
     public void openAiScheduleProcess() {
