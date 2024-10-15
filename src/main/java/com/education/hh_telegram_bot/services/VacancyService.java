@@ -28,7 +28,7 @@ public class VacancyService {
         return vacancyRepository.findAllByGeneratedDescriptionIsNull();
     }
 
-    public List<Vacancy> byNotificationAttemptCountLessThan(int count) {
+    public List<Vacancy> findByNotificationAttemptCountLessThan(int count) {
         return vacancyRepository.findGeneratedVacanciesWithAttemptsLessThan(count);
     }
 

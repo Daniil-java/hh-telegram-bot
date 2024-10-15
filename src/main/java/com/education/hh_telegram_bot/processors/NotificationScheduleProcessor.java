@@ -22,7 +22,7 @@ public class NotificationScheduleProcessor implements ScheduleProcessor {
     @Transactional
     public void process() {
         //Получение неотправлленых пользователю вакансий
-        List<Vacancy> vacancyList = vacancyService.byNotificationAttemptCountLessThan(3);
+        List<Vacancy> vacancyList = vacancyService.findByNotificationAttemptCountLessThan(3);
         for (Vacancy vacancy : vacancyList) {
             long chatId = vacancy.getWorkFilter().getUser().getChatId();
             //Проверка состояния отправленного сообщения
