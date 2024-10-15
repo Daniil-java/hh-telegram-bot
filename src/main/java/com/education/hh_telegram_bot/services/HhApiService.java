@@ -1,7 +1,9 @@
 package com.education.hh_telegram_bot.services;
 
 import com.education.hh_telegram_bot.entities.WorkFilter;
+import com.education.hh_telegram_bot.entities.hh.HhResponseDto;
 import com.education.hh_telegram_bot.entities.hh.HhSimpleResponseDto;
+import com.education.hh_telegram_bot.integrations.HhFeignClient;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -18,11 +20,12 @@ import java.util.List;
 @AllArgsConstructor
 @Slf4j
 public class HhApiService {
+    private final HhFeignClient hhFeignClient;
 
     //Загрузка страницы, с использованием Jsoup, и парсинг результатов в сущности
     public List<HhSimpleResponseDto> loadAndParseHhVacancies(WorkFilter workFilter) {
         String url = workFilter.getUrl();
-        ArrayList<HhSimpleResponseDto> hhSimpleResponseDtos = new ArrayList<>();
+        List<HhSimpleResponseDto> hhSimpleResponseDtos = new ArrayList<>();
         try {
             //Получение страницы
             Document document = Jsoup.connect(url).get();
@@ -53,5 +56,8 @@ public class HhApiService {
                         url.lastIndexOf("/") + 1, url.indexOf("?")));
     }
 
-
+    public HhResponseDto getVacancyByHhId(Long vacancyId) {
+        //Получение ДТО-вакансии по id, посредством обращения к api
+        return hhFeignClient.getVacancyById(vacancyId);
+    }
 }

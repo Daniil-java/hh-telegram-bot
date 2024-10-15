@@ -23,15 +23,15 @@ public class TelegramService {
 
     public String vacancyToFormattedString(Vacancy vacancy) {
         StringBuilder builder = new StringBuilder();
-        builder.append(nullSafe(vacancy.getName())).append("\n");
-        builder.append(nullSafe(vacancy.getDepartment())).append("\n");
-        builder.append(nullSafe(vacancy.getSalary())).append("\n");
-        builder.append(nullSafe(vacancy.getExperience())).append("\n");
-        builder.append(nullSafe(vacancy.getGeneratedDescription())).append("\n");
-        return builder.toString();
+        builder.append(nullSafe(vacancy.getName()));
+        builder.append(nullSafe(vacancy.getDepartment()));
+        builder.append(nullSafe(vacancy.getSalary()));
+        builder.append(nullSafe(vacancy.getExperience()));
+        builder.append(nullSafe(vacancy.getGeneratedDescription()));
+        return builder.toString().trim();
     }
 
     private String nullSafe(String field) {
-        return field == null ? "" : field;
+        return field == null ? "" : field + "\n";
     }
 }
