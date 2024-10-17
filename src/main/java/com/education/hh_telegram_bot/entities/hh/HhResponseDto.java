@@ -15,7 +15,7 @@ public class HhResponseDto {
     private Employment employment;
     private Experience experience;
     private String id;
-    private List<Skill> keySkills;
+    private List<String> keySkills;
     private String name;
     private String previousId;
     private String publishedAt;
@@ -24,10 +24,6 @@ public class HhResponseDto {
     private Salary salary;
     private Schedule schedule;
 
-    @Data
-    public static class Skill {
-        private String name;
-    }
     @Data
     public static class Contacts {
         private String email;

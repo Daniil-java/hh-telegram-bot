@@ -49,7 +49,7 @@ public class Vacancy {
                 .setDescription(responseDto.getDescription());
         StringBuilder builder = new StringBuilder();
         if (responseDto.getKeySkills() != null) {
-            for (HhResponseDto.Skill skill: responseDto.getKeySkills()) {
+            for (String skill: responseDto.getKeySkills()) {
                 builder.append(skill).append(" | ");
             }
             vacancy.setKeySkills(builder.toString());

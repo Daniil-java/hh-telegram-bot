@@ -2,14 +2,13 @@ package com.education.hh_telegram_bot.telegram.facades;
 
 import com.education.hh_telegram_bot.entities.UserEntity;
 import com.education.hh_telegram_bot.services.UserService;
+import com.education.hh_telegram_bot.telegram.handlers.CallbackHandler;
 import com.education.hh_telegram_bot.telegram.handlers.InputMessageHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 @Component
 @RequiredArgsConstructor
@@ -17,28 +16,23 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class MessageFacade {
     private final UserService userService;
     private final InputMessageHandler inputMessageHandler;
+    private final CallbackHandler callBackHandler;
 
     public void handleUpdate(Update update) {
         /*
          На этапе разработки обработка сообщений
          происходит только от одного пользователя
          */
-        if (update.getMessage().getFrom().getId() != 425120436L) return;
+        User user = update.getMessage() != null ?
+                update.getMessage().getFrom() :
+                update.getCallbackQuery().getFrom();
+        if (user.getId() != 425120436L) return;
 
+        UserEntity userEntity = userService.getOrCreateUser(user);
         if (update.hasCallbackQuery()) {
-            handleInputCallback(update.getCallbackQuery());
-        }else {
-            handleInputMessage(update.getMessage());
+            callBackHandler.processCallbackQuery(update.getCallbackQuery(), userEntity);
+        } else {
+            inputMessageHandler.processInputMessage(update.getMessage(), userEntity);
         }
-    }
-
-    private void handleInputMessage(Message message) {
-        UserEntity userEntity = userService.getOrCreateUser(message.getFrom());
-        inputMessageHandler.processInputMessage(message, userEntity);
-    }
-
-    private BotApiMethod handleInputCallback(CallbackQuery callbackQuery) {
-        //TODO: Планируется
-        return null;
     }
 }

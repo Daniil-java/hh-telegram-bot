@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
-    List<Vacancy> findAllByGeneratedDescriptionIsNull();
+    List<Vacancy> findAllByGeneratedDescriptionIsNullAndDescriptionIsNotNull();
 
     List<Vacancy> findAllByNameIsNull();
 
@@ -20,4 +20,6 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
     List<Vacancy> findGeneratedVacanciesWithAttemptsLessThan (@Param("count") int count);
 
     Optional<Vacancy> findByHhIdAndWorkFilterId(long hhId, long workFilterId);
+
+    Optional<Vacancy> findByHhIdAndDescriptionNotNull(long hhId);
 }
