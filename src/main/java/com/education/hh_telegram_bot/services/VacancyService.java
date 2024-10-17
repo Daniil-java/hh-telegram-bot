@@ -84,8 +84,11 @@ public class VacancyService {
         if (vacancyOptional.isPresent()) {
             Vacancy vacancy = vacancyOptional.get();
             //Получение сгенерированного сопроводительного письма, на основе полного описания
+            StringBuilder builder = new StringBuilder();
+            builder.append("Ключевые навыки: ").append(vacancy.getKeySkills()).append("\n");
+            builder.append(vacancy.getDescription());
             String coverLetter = openAiApiFeignService
-                    .generateCoverLetter(vacancy.getDescription());
+                    .generateCoverLetter(builder.toString());
             return coverLetter;
         }
         return null;

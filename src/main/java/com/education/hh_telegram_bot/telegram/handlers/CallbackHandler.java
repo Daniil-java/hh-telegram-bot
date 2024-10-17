@@ -6,11 +6,10 @@ import com.education.hh_telegram_bot.services.VacancyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 @Component
-public class CallBackHandler {
+public class CallbackHandler {
     private static final String CB_COMMAND = "coverLetter";
     @Autowired
     private VacancyService vacancyService;
@@ -29,13 +28,7 @@ public class CallBackHandler {
         if (callbackData.startsWith(CB_COMMAND)) {
             long vacancyHhId = Long.parseLong(callbackData.substring(CB_COMMAND.length()));
             String coverLetter = vacancyService.fetchGenerateCoverLetter(vacancyHhId);
-            telegramService.sendReturnedMessage(
-                    SendMessage.builder()
-                            .chatId(chatId)
-                            .text(coverLetter)
-                            .replyToMessageId(messageId)
-                            .build()
-            );
+            telegramService.sendReturnedMessage(chatId, coverLetter, null, messageId);
         }
     }
 }

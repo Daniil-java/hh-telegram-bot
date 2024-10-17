@@ -5,6 +5,7 @@ import com.education.hh_telegram_bot.telegram.TelegramBot;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -20,8 +21,18 @@ import java.util.List;
 public class TelegramService {
     private final TelegramBot telegramBot;
 
-    public Message sendReturnedMessage(SendMessage message) {
-        return telegramBot.sendReturnedMessage(message);
+    public Message sendReturnedMessage(long chatId, String text,
+                                       InlineKeyboardMarkup inlineKeyboardMarkup, int replyMessageId) {
+        return telegramBot.sendReturnedMessage(
+                SendMessage.builder()
+                        .chatId(chatId)
+                        .text(text)
+                        .replyMarkup(inlineKeyboardMarkup)
+                        .replyToMessageId(replyMessageId)
+                        .parseMode(ParseMode.HTML)
+                        .disableWebPagePreview(true)
+                        .build()
+        );
     }
 
     public Message sendReturnedVacancyMessage(Long chatId, Vacancy vacancy) {

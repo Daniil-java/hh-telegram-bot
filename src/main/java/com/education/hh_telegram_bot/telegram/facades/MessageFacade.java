@@ -2,7 +2,7 @@ package com.education.hh_telegram_bot.telegram.facades;
 
 import com.education.hh_telegram_bot.entities.UserEntity;
 import com.education.hh_telegram_bot.services.UserService;
-import com.education.hh_telegram_bot.telegram.handlers.CallBackHandler;
+import com.education.hh_telegram_bot.telegram.handlers.CallbackHandler;
 import com.education.hh_telegram_bot.telegram.handlers.InputMessageHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 public class MessageFacade {
     private final UserService userService;
     private final InputMessageHandler inputMessageHandler;
-    private final CallBackHandler callBackHandler;
+    private final CallbackHandler callBackHandler;
 
     public void handleUpdate(Update update) {
         /*
