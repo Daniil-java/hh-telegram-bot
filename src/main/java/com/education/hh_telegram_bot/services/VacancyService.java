@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class VacancyService {
     }
 
     public List<Vacancy> getAllUngeneratedVacancies() {
-        return vacancyRepository.findAllByGeneratedDescriptionIsNull();
+        return vacancyRepository.findAllByGeneratedDescriptionIsNullAndDescriptionIsNotNull();
     }
 
     public List<Vacancy> findByNotificationAttemptCountLessThan(int count) {
@@ -56,19 +57,38 @@ public class VacancyService {
     public void fetchAndSaveEntity(Vacancy vacancy) {
         //Получение ДТО-вакансии обращением к api
         HhResponseDto responseDto = hhApiService.getVacancyByHhId(vacancy.getHhId());
+        //Конвертация keySkills в String
+        StringBuilder builder = new StringBuilder();
+        for (String skill: responseDto.getKeySkills()) {
+            builder.append(skill).append("|");
+        }
         //Конвертация ДТО в сущность вакансии и сохранение
         vacancyRepository.save(vacancy.setName(responseDto.getName())
                 .setExperience(responseDto.getExperience().getName())
+                .setKeySkills(builder.toString())
                 .setEmployment(responseDto.getEmployment().getName())
                 .setDescription(responseDto.getDescription()));
     }
 
     //Сохранение сгенерированного описания вакансии, посредством обращения к OpenAI API
-    public void fetchGenerateDescriptionAndSaveEntity(Vacancy vacancy) {
+    public void fetchGenerateDescriptionAndUpdateEntity(Vacancy vacancy) {
         //Получение сгенерированного краткого описания, на основе описания полного
         String generatedDescription = openAiApiFeignService
                 .generateDescription(vacancy.getDescription());
         //Обновление и сохранение данных вакансии
         vacancyRepository.save(vacancy.setGeneratedDescription(generatedDescription));
+    }
+
+    public String fetchGenerateCoverLetter(Long vacancyHhId) {
+        Optional<Vacancy> vacancyOptional = vacancyRepository.findByHhIdAndDescriptionNotNull(vacancyHhId);
+        if (vacancyOptional.isPresent()) {
+            Vacancy vacancy = vacancyOptional.get();
+            //Получение сгенерированного сопроводительного письма, на основе полного описания
+            String coverLetter = openAiApiFeignService
+                    .generateCoverLetter(vacancy.getDescription());
+            return coverLetter;
+        }
+        return null;
+
     }
 }

@@ -26,4 +26,17 @@ public class OpenAiApiFeignService {
 
         return response.getChoices().get(0).getMessage().getContent();
     }
+
+    public String generateCoverLetter(String description) {
+        //Создание текста запроса для обращение к OpenAI API
+        String request = String.format(
+                "Напиши сопроводительное письмо для следующей вакансии: ", description);
+        //Отправка запроса и получение ответа от ИИ
+        OpenAiChatCompletionResponse response = openAiFeignClient.generate(
+                "Bearer " + openAiKeyConfiguration.getKey(),
+                OpenAiChatCompletionRequest.makeRequest(request)
+        );
+
+        return response.getChoices().get(0).getMessage().getContent();
+    }
 }

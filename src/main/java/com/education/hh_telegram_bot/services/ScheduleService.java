@@ -20,26 +20,27 @@ public class ScheduleService {
 
     //TODO: Шедулеры требует пересмотра времени срабатывания
 //    @Scheduled(initialDelay = 1000)
-    @Scheduled(cron = "0 0/30 * * * ?")
+    @Scheduled(cron = "0/5 * * * * *")
     public void workFilterScheduleProcess() {
         getInfo(workFilterScheduleProcessor.getSchedulerName());
         workFilterScheduleProcessor.process();
     }
 
 
-    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(cron = "0/15 * * * * *")
     public void openAiScheduleProcess() {
         getInfo(openAiScheduleProcessor.getSchedulerName());
         openAiScheduleProcessor.process();
     }
 
-    @Scheduled(cron = "0 0 0/3 * * ?")
+    @Scheduled(cron = "0/10 * * * * *")
+    @Scheduled(fixedRate = 620000)
     public void vacancyScheduleProcess() {
         getInfo(vacancyScheduleProcessor.getSchedulerName());
         vacancyScheduleProcessor.process();
     }
 
-    @Scheduled(cron = "0 0 0/2 * * ?")
+    @Scheduled(cron = "0 0/1 * * * *")
     public void notificationScheduleProcess() {
         getInfo(notificationScheduleProcessor.getSchedulerName());
         notificationScheduleProcessor.process();
