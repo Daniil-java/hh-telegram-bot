@@ -30,7 +30,7 @@ public class OpenAiScheduleProcessor implements ScheduleProcessor {
             }
             try {
                 //Обработка вакансии для генерации описания
-                vacancyService.fetchGenerateDescriptionAndSaveEntity(vacancy);
+                vacancyService.fetchGenerateDescriptionAndUpdateEntity(vacancy);
             } catch (Exception e) {
                 log.error("OpenAiScheduleProcessor: generation error!", e);
                 countException++;

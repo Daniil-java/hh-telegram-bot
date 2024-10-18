@@ -33,6 +33,7 @@ public class InputMessageHandler {
 
     private boolean isValidated(String text) {
         return text.startsWith("hh.ru/vacancies/")
-                || text.startsWith("https://hh.ru/vacancies/");
+                || text.startsWith("https://hh.ru/vacancies/")
+                || text.startsWith("https://hh.ru/search/vacancy");
     }
 }
