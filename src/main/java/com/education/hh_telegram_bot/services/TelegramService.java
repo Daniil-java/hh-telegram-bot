@@ -40,6 +40,8 @@ public class TelegramService {
                 .chatId(chatId)
                 .text(vacancyToFormattedString(vacancy))
                 .replyMarkup(getInlineMessageButtonLetterGenerate(vacancy.getHhId()))
+                .parseMode(ParseMode.HTML)
+                .disableWebPagePreview(true)
                 .build());
     }
 
@@ -59,7 +61,7 @@ public class TelegramService {
 
     public String vacancyToFormattedString(Vacancy vacancy) {
         StringBuilder builder = new StringBuilder();
-        builder.append(nullSafe(vacancy.getName()));
+        builder.append("<strong>").append(nullSafe(vacancy.getName())).append("</strong>");
         builder.append(nullSafe(vacancy.getDepartment()));
         builder.append(nullSafe(vacancy.getSalary()));
         builder.append(nullSafe(vacancy.getExperience()));

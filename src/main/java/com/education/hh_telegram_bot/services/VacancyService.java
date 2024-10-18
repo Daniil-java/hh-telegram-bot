@@ -59,9 +59,12 @@ public class VacancyService {
         HhResponseDto responseDto = hhApiService.getVacancyByHhId(vacancy.getHhId());
         //Конвертация keySkills в String
         StringBuilder builder = new StringBuilder();
-        for (String skill: responseDto.getKeySkills()) {
-            builder.append(skill).append("|");
+        if (responseDto.getKeySkills() != null) {
+            for (String skill: responseDto.getKeySkills()) {
+                builder.append(skill).append("|");
+            }
         }
+
         //Конвертация ДТО в сущность вакансии и сохранение
         vacancyRepository.save(vacancy.setName(responseDto.getName())
                 .setExperience(responseDto.getExperience().getName())
