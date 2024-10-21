@@ -10,7 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 @Component
 public class CallbackHandler {
-    private static final String CB_COMMAND = "coverLetter";
+    private static final String APPLIED_COMMAND = "/applied";
+    private static final String REJECTED_COMMAND = "/rejected";
     @Autowired
     private VacancyService vacancyService;
     @Autowired
@@ -25,10 +26,14 @@ public class CallbackHandler {
             Расриширение приложения не планируется,
             потому динамическая подмена реализации не применяется
          */
-        if (callbackData.startsWith(CB_COMMAND)) {
-            long vacancyHhId = Long.parseLong(callbackData.substring(CB_COMMAND.length()));
-            String coverLetter = vacancyService.fetchGenerateCoverLetter(vacancyHhId);
+        if (callbackData.startsWith(APPLIED_COMMAND)) {
+            long vacancyId = Long.parseLong(callbackData.substring(APPLIED_COMMAND.length()));
+            String coverLetter = vacancyService.fetchGenerateCoverLetter(vacancyId, userEntity.getInfo());
             telegramService.sendReturnedMessage(chatId, coverLetter, null, messageId);
+        }
+        if (callbackData.startsWith(REJECTED_COMMAND)) {
+            long vacancyId = Long.parseLong(callbackData.substring(REJECTED_COMMAND.length()));
+            vacancyService.vacancyRejectById(vacancyId);
         }
     }
 }

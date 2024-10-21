@@ -1,6 +1,7 @@
 package com.education.hh_telegram_bot.services;
 
 import com.education.hh_telegram_bot.entities.WorkFilter;
+import com.education.hh_telegram_bot.entities.hh.HhEmployerDto;
 import com.education.hh_telegram_bot.entities.hh.HhResponseDto;
 import com.education.hh_telegram_bot.entities.hh.HhSimpleResponseDto;
 import com.education.hh_telegram_bot.integrations.HhFeignClient;
@@ -56,8 +57,13 @@ public class HhApiService {
                         url.lastIndexOf("/") + 1, url.indexOf("?")));
     }
 
-    public HhResponseDto getVacancyByHhId(Long vacancyId) {
+    public HhResponseDto getHhVacancyDtoByHhId(Long vacancyId) {
         //Получение ДТО-вакансии по id, посредством обращения к api
         return hhFeignClient.getVacancyById(vacancyId);
+    }
+
+    public HhEmployerDto getHhEmployerDtoByHhId(Long employerId) {
+        //Получение ДТО-работодателя по id
+        return hhFeignClient.getEmployerById(employerId);
     }
 }

@@ -26,6 +26,7 @@ public class UserEntity {
     private String languageCode;
     @OneToMany(mappedBy="user")
     private Set<WorkFilter> workFilters;
+    private String info;
     @CreationTimestamp
     private LocalDateTime created;
 

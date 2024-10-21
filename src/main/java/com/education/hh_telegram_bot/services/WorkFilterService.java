@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,10 +19,17 @@ public class WorkFilterService {
     private final WorkFilterRepository workFilterRepository;
     private final HhApiService hhApiService;
 
-    public WorkFilter save(Long userId, String url) {
-        return workFilterRepository.save(new WorkFilter()
-                .setUser(new UserEntity().setId(userId))
-                .setUrl(url)
+    public WorkFilter create(Long userId, String url) {
+        Optional<WorkFilter> optionalWorkFilter =
+                workFilterRepository.findByUserIdAndUrl(userId, url);
+        if (optionalWorkFilter.isPresent()) {
+            return optionalWorkFilter.get();
+        }
+
+        return workFilterRepository.save(
+                new WorkFilter()
+                        .setUser(new UserEntity().setId(userId))
+                        .setUrl(url)
         );
     }
 
