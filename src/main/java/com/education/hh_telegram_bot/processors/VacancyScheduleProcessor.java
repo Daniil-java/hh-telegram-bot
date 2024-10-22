@@ -1,6 +1,7 @@
 package com.education.hh_telegram_bot.processors;
 
 import com.education.hh_telegram_bot.entities.Vacancy;
+import com.education.hh_telegram_bot.entities.VacancyStatus;
 import com.education.hh_telegram_bot.services.VacancyService;
 import com.education.hh_telegram_bot.utils.ThreadUtil;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ public class VacancyScheduleProcessor implements ScheduleProcessor {
     @Override
     public void process() {
         //Загрузка необработанных вакансий
-        List<Vacancy> vacancyList = vacancyService.getAllUnprocessedVacancies();
+        List<Vacancy> vacancyList = vacancyService.getAllByVacancyStatus(VacancyStatus.CREATED);
 
         //Счетчик возникших исключений
         int countException = 0;

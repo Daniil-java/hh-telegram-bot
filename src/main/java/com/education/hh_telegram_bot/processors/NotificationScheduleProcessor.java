@@ -1,6 +1,7 @@
 package com.education.hh_telegram_bot.processors;
 
 import com.education.hh_telegram_bot.entities.Vacancy;
+import com.education.hh_telegram_bot.entities.VacancyStatus;
 import com.education.hh_telegram_bot.services.TelegramService;
 import com.education.hh_telegram_bot.services.VacancyService;
 import com.education.hh_telegram_bot.utils.ThreadUtil;
@@ -17,12 +18,13 @@ import java.util.List;
 public class NotificationScheduleProcessor implements ScheduleProcessor {
     private final VacancyService vacancyService;
     private final TelegramService telegramService;
+    private static final int MAX_ATTEMPT_COUNT = 3;
 
     @Override
     @Transactional
     public void process() {
         //Получение неотправлленых пользователю вакансий
-        List<Vacancy> vacancyList = vacancyService.findByNotificationAttemptCountLessThan(3);
+        List<Vacancy> vacancyList = vacancyService.findByNotificationAttemptCountLessThan(MAX_ATTEMPT_COUNT);
         for (Vacancy vacancy : vacancyList) {
             long chatId = vacancy.getWorkFilter().getUser().getChatId();
             //Проверка состояния отправленного сообщения
@@ -30,6 +32,9 @@ public class NotificationScheduleProcessor implements ScheduleProcessor {
                 vacancy.setNotificationAttemptCount(9999);
             } else {
                 vacancy.setNotificationAttemptCount(vacancy.getNotificationAttemptCount() + 1);
+                if (vacancy.getNotificationAttemptCount() > MAX_ATTEMPT_COUNT) {
+                    vacancy.setStatus(VacancyStatus.NOTIFICATION_ERROR);
+                }
             }
             //Сохранение статуса отправки вакансии
             vacancyService.save(vacancy);

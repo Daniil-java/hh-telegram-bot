@@ -1,6 +1,7 @@
 package com.education.hh_telegram_bot.telegram.handlers;
 
 import com.education.hh_telegram_bot.entities.UserEntity;
+import com.education.hh_telegram_bot.entities.VacancyStatus;
 import com.education.hh_telegram_bot.services.TelegramService;
 import com.education.hh_telegram_bot.services.VacancyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 @Component
 public class CallbackHandler {
-    private static final String APPLIED_COMMAND = "/applied";
-    private static final String REJECTED_COMMAND = "/rejected";
+    private static final String APPLIED_COMMAND = VacancyStatus.APPLIED.name();
+    private static final String REJECTED_COMMAND = VacancyStatus.REJECTED.name();
     @Autowired
     private VacancyService vacancyService;
     @Autowired

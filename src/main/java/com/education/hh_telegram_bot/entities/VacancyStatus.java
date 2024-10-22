@@ -8,5 +8,10 @@ import lombok.Getter;
 public enum VacancyStatus {
     APPLIED,
     REJECTED,
-    PENDING;
+    PENDING,
+
+    CREATED,
+    PARSED,
+    PROCESSED,
+    NOTIFICATION_ERROR;
 }

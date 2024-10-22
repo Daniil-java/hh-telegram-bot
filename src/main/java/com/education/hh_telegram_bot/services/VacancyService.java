@@ -23,6 +23,9 @@ public class VacancyService {
     private final HhApiService hhApiService;
     private final OpenAiApiFeignService openAiApiFeignService;
 
+    public List<Vacancy> getAllByVacancyStatus(VacancyStatus vacancyStatus) {
+        return vacancyRepository.findAllByStatus(vacancyStatus);
+    }
     public List<Vacancy> getAllUnprocessedVacancies() {
         return vacancyRepository.findAllByNameIsNull();
     }
@@ -32,7 +35,7 @@ public class VacancyService {
     }
 
     public List<Vacancy> findByNotificationAttemptCountLessThan(int count) {
-        return vacancyRepository.findGeneratedVacanciesWithAttemptsLessThan(count);
+        return vacancyRepository.findProcessedVacanciesWithAttemptsLessThan(count);
     }
 
     public Vacancy save(Vacancy vacancy) {
@@ -49,7 +52,9 @@ public class VacancyService {
                 vacancyRepository.save(new Vacancy()
                         .setUrl(dto.getUrl())
                         .setHhId(dto.getHhId())
-                        .setWorkFilter(workFilter));
+                        .setWorkFilter(workFilter)
+                        .setStatus(VacancyStatus.CREATED)
+                );
             }
         }
     }
@@ -74,7 +79,9 @@ public class VacancyService {
                 .setKeySkills(builder.toString())
                 .setEmployment(responseDto.getEmployment().getName())
                 .setDescription(responseDto.getDescription())
-                .setEmployerDescription(hhEmployerDto.getDescription()));
+                .setEmployerDescription(hhEmployerDto.getDescription())
+                .setStatus(VacancyStatus.PARSED)
+        );
     }
 
     //Сохранение сгенерированного описания вакансии, посредством обращения к OpenAI API
@@ -83,13 +90,16 @@ public class VacancyService {
         String generatedDescription = openAiApiFeignService
                 .generateDescription(vacancy.getDescription());
         //Обновление и сохранение данных вакансии
-        vacancyRepository.save(vacancy.setGeneratedDescription(generatedDescription));
+        vacancyRepository.save(vacancy
+                .setGeneratedDescription(generatedDescription)
+                .setStatus(VacancyStatus.PROCESSED)
+        );
     }
 
     public String fetchGenerateCoverLetter(Long vacancyId, String userInfo) {
         Optional<Vacancy> vacancyOptional = vacancyRepository.findByIdAndDescriptionNotNull(vacancyId);
         if (vacancyOptional.isPresent()) {
-            vacancyRepository.updateStatusByHhId(vacancyId, VacancyStatus.APPLIED.name());
+            vacancyRepository.updateStatusByHhId(vacancyId, VacancyStatus.APPLIED);
             Vacancy vacancy = vacancyOptional.get();
             //Получение сгенерированного сопроводительного письма, на основе полного описания
             StringBuilder builder = new StringBuilder();
@@ -105,6 +115,6 @@ public class VacancyService {
     }
 
     public void vacancyRejectById(long vacancyHhId) {
-        vacancyRepository.updateStatusByHhId(vacancyHhId, VacancyStatus.REJECTED.name());
+        vacancyRepository.updateStatusByHhId(vacancyHhId, VacancyStatus.REJECTED);
     }
 }
