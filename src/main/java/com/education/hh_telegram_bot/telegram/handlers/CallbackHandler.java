@@ -29,7 +29,8 @@ public class CallbackHandler implements UpdateHandler {
         Integer messageId = callbackQuery.getMessage().getMessageId();
         String callbackData = callbackQuery.getData();
 
-        if (callbackData.contains(APPLIED_COMMAND)) {
+        String decision = callbackData.split(" ")[1];
+        if (decision.equals(APPLIED_COMMAND)) {
             long vacancyId = Long.parseLong(callbackData.substring(APPLIED_COMMAND.length()));
             String coverLetter = vacancyService.fetchGenerateCoverLetter(vacancyId, userEntity.getInfo());
             //Отправка сообщения пользователю и обработка, в случае удачного отправления
@@ -37,7 +38,7 @@ public class CallbackHandler implements UpdateHandler {
                     null, messageId) != null) {
                 vacancyService.updateStatusById(vacancyId, VacancyStatus.APPLIED);
             }
-        } else if (callbackData.contains(REJECTED_COMMAND)) {
+        } else if (decision.equals(REJECTED_COMMAND)) {
             long vacancyId = Long.parseLong(callbackData.substring(REJECTED_COMMAND.length()));
             vacancyService.vacancyRejectById(vacancyId);
         }

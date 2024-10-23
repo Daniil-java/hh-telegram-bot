@@ -116,7 +116,7 @@ public class VacancyService {
         vacancyRepository.updateStatusById(vacancyId, vacancyStatus);
     }
 
-    public void vacancyRejectById(long vacancyHhId) {
-        vacancyRepository.updateStatusById(vacancyHhId, VacancyStatus.REJECTED);
+    public void vacancyRejectById(long vacancyId) {
+        vacancyRepository.updateStatusById(vacancyId, VacancyStatus.REJECTED);
     }
 }

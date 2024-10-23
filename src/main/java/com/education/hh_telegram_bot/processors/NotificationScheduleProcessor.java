@@ -30,7 +30,6 @@ public class NotificationScheduleProcessor implements ScheduleProcessor {
             //Проверка состояния отправленного сообщения
             if (telegramService.sendReturnedVacancyMessage(chatId, vacancy) != null) {
                 vacancy.setStatus(VacancyStatus.NOTIFICATED);
-                vacancy.setNotificationAttemptCount(9999);
             } else {
                 vacancy.setNotificationAttemptCount(vacancy.getNotificationAttemptCount() + 1);
                 if (vacancy.getNotificationAttemptCount() > MAX_ATTEMPT_COUNT) {

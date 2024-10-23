@@ -9,15 +9,15 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class MessageFacade {
     private final UserService userService;
-    private Map<String, UpdateHandler> map = new HashMap<>();
+    private Map<String, UpdateHandler> map = new ConcurrentHashMap<>();
 
     public void register(String botState, UpdateHandler updateHandler) {
         map.put(botState, updateHandler);
