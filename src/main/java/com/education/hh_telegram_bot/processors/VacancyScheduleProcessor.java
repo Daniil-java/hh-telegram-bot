@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 public class VacancyScheduleProcessor implements ScheduleProcessor {
     private final VacancyService vacancyService;
-    private final int MAX_EXCEPTION = 3;
+    private final static int MAX_EXCEPTION = 3;
 
     @Override
     public void process() {

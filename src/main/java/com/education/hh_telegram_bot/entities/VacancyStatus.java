@@ -9,6 +9,7 @@ public enum VacancyStatus {
     APPLIED,
     REJECTED,
     PENDING,
+    NOTIFICATED,
 
     CREATED,
     PARSED,

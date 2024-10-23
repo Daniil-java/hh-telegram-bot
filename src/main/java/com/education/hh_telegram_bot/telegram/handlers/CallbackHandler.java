@@ -8,33 +8,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
-public class CallbackHandler {
+public class CallbackHandler implements UpdateHandler {
     private static final String APPLIED_COMMAND = VacancyStatus.APPLIED.name();
     private static final String REJECTED_COMMAND = VacancyStatus.REJECTED.name();
+
+    public static final String REQUEST_COMMAND = "/decision";
     @Autowired
     private VacancyService vacancyService;
     @Autowired
     @Lazy
     private TelegramService telegramService;
 
-    public void processCallbackQuery(CallbackQuery callbackQuery, UserEntity userEntity) {
+    @Override
+    public void handle(Update update, UserEntity userEntity) {
+        CallbackQuery callbackQuery = update.getCallbackQuery();
         Long chatId = callbackQuery.getMessage().getChatId();
         Integer messageId = callbackQuery.getMessage().getMessageId();
         String callbackData = callbackQuery.getData();
-        /*
-            Расриширение приложения не планируется,
-            потому динамическая подмена реализации не применяется
-         */
-        if (callbackData.startsWith(APPLIED_COMMAND)) {
+
+        if (callbackData.contains(APPLIED_COMMAND)) {
             long vacancyId = Long.parseLong(callbackData.substring(APPLIED_COMMAND.length()));
             String coverLetter = vacancyService.fetchGenerateCoverLetter(vacancyId, userEntity.getInfo());
-            telegramService.sendReturnedMessage(chatId, coverLetter, null, messageId);
-        }
-        if (callbackData.startsWith(REJECTED_COMMAND)) {
+            //Отправка сообщения пользователю и обработка, в случае удачного отправления
+            if (telegramService.sendReturnedMessage(chatId, coverLetter,
+                    null, messageId) != null) {
+                vacancyService.updateStatusById(vacancyId, VacancyStatus.APPLIED);
+            }
+        } else if (callbackData.contains(REJECTED_COMMAND)) {
             long vacancyId = Long.parseLong(callbackData.substring(REJECTED_COMMAND.length()));
             vacancyService.vacancyRejectById(vacancyId);
         }
+    }
+
+    @Override
+    public String getHandlerListName() {
+        return "/decision";
     }
 }

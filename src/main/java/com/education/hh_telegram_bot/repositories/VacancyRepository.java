@@ -35,5 +35,5 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
     @Modifying
     @Transactional
     @Query("UPDATE Vacancy v SET v.status = :status WHERE v.id = :id")
-    void updateStatusByHhId(@Param("id") Long hhId, @Param("status") VacancyStatus status);
+    void updateStatusById(@Param("id") Long hhId, @Param("status") VacancyStatus status);
 }

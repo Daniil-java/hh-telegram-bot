@@ -99,7 +99,6 @@ public class VacancyService {
     public String fetchGenerateCoverLetter(Long vacancyId, String userInfo) {
         Optional<Vacancy> vacancyOptional = vacancyRepository.findByIdAndDescriptionNotNull(vacancyId);
         if (vacancyOptional.isPresent()) {
-            vacancyRepository.updateStatusByHhId(vacancyId, VacancyStatus.APPLIED);
             Vacancy vacancy = vacancyOptional.get();
             //Получение сгенерированного сопроводительного письма, на основе полного описания
             StringBuilder builder = new StringBuilder();
@@ -111,10 +110,13 @@ public class VacancyService {
             return coverLetter;
         }
         return null;
+    }
 
+    public void updateStatusById(Long vacancyId, VacancyStatus vacancyStatus) {
+        vacancyRepository.updateStatusById(vacancyId, vacancyStatus);
     }
 
     public void vacancyRejectById(long vacancyHhId) {
-        vacancyRepository.updateStatusByHhId(vacancyHhId, VacancyStatus.REJECTED);
+        vacancyRepository.updateStatusById(vacancyHhId, VacancyStatus.REJECTED);
     }
 }

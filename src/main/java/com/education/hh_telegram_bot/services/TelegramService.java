@@ -3,6 +3,7 @@ package com.education.hh_telegram_bot.services;
 import com.education.hh_telegram_bot.entities.Vacancy;
 import com.education.hh_telegram_bot.entities.VacancyStatus;
 import com.education.hh_telegram_bot.telegram.TelegramBot;
+import com.education.hh_telegram_bot.telegram.handlers.CallbackHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -47,14 +48,15 @@ public class TelegramService {
     }
 
     private InlineKeyboardMarkup getInlineMessageButtonLetterGenerate(long vacancyId) {
+        String callbackCommand = CallbackHandler.REQUEST_COMMAND;
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton generateButton =
                 new InlineKeyboardButton("Принять");
         InlineKeyboardButton rejectButton =
                 new InlineKeyboardButton("Отклонить");
-        generateButton.setCallbackData(VacancyStatus.APPLIED.name() + vacancyId);
-        rejectButton.setCallbackData(VacancyStatus.REJECTED.name() + vacancyId);
+        generateButton.setCallbackData(callbackCommand + " " + VacancyStatus.APPLIED.name() + vacancyId);
+        rejectButton.setCallbackData(callbackCommand + " " + VacancyStatus.REJECTED.name() + vacancyId);
 
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(Arrays.asList(generateButton, rejectButton));
