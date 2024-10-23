@@ -23,6 +23,7 @@ public class HhResponseDto {
     private String responseUrl;
     private Salary salary;
     private Schedule schedule;
+    private HhEmployerDto employer;
 
     @Data
     public static class Contacts {

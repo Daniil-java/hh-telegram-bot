@@ -22,7 +22,6 @@ public class WorkFilterScheduleProcessor implements ScheduleProcessor{
 
     @Override
     public void process() {
-        //TODO: Проверка на неактивные ссылки
         //Формирование общего листа пользовательских ссылок
         List<WorkFilter> workFilterList = workFilterService.getAll();
         //Загрузка, парсинг и сохранение в БД id вакансий

@@ -36,6 +36,10 @@ public class Vacancy {
     @ManyToOne
     @JoinColumn(name="work_filter_id")
     private WorkFilter workFilter;
+    @Enumerated(EnumType.STRING)
+    private VacancyStatus status;
+    @Column(name = "employer_description")
+    private String employerDescription;
     @CreationTimestamp
     private LocalDateTime created;
 

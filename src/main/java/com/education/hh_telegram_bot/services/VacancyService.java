@@ -1,7 +1,9 @@
 package com.education.hh_telegram_bot.services;
 
 import com.education.hh_telegram_bot.entities.Vacancy;
+import com.education.hh_telegram_bot.entities.VacancyStatus;
 import com.education.hh_telegram_bot.entities.WorkFilter;
+import com.education.hh_telegram_bot.entities.hh.HhEmployerDto;
 import com.education.hh_telegram_bot.entities.hh.HhResponseDto;
 import com.education.hh_telegram_bot.entities.hh.HhSimpleResponseDto;
 import com.education.hh_telegram_bot.repositories.VacancyRepository;
@@ -21,6 +23,9 @@ public class VacancyService {
     private final HhApiService hhApiService;
     private final OpenAiApiFeignService openAiApiFeignService;
 
+    public List<Vacancy> getAllByVacancyStatus(VacancyStatus vacancyStatus) {
+        return vacancyRepository.findAllByStatus(vacancyStatus);
+    }
     public List<Vacancy> getAllUnprocessedVacancies() {
         return vacancyRepository.findAllByNameIsNull();
     }
@@ -30,7 +35,7 @@ public class VacancyService {
     }
 
     public List<Vacancy> findByNotificationAttemptCountLessThan(int count) {
-        return vacancyRepository.findGeneratedVacanciesWithAttemptsLessThan(count);
+        return vacancyRepository.findProcessedVacanciesWithAttemptsLessThan(count);
     }
 
     public Vacancy save(Vacancy vacancy) {
@@ -47,7 +52,9 @@ public class VacancyService {
                 vacancyRepository.save(new Vacancy()
                         .setUrl(dto.getUrl())
                         .setHhId(dto.getHhId())
-                        .setWorkFilter(workFilter));
+                        .setWorkFilter(workFilter)
+                        .setStatus(VacancyStatus.CREATED)
+                );
             }
         }
     }
@@ -56,7 +63,8 @@ public class VacancyService {
     //Обработка незаполненых вакансий, посредством обращения к api
     public void fetchAndSaveEntity(Vacancy vacancy) {
         //Получение ДТО-вакансии обращением к api
-        HhResponseDto responseDto = hhApiService.getVacancyByHhId(vacancy.getHhId());
+        HhResponseDto responseDto = hhApiService.getHhVacancyDtoByHhId(vacancy.getHhId());
+        HhEmployerDto hhEmployerDto = hhApiService.getHhEmployerDtoByHhId(responseDto.getEmployer().getId());
         //Конвертация keySkills в String
         StringBuilder builder = new StringBuilder();
         if (responseDto.getKeySkills() != null) {
@@ -70,7 +78,10 @@ public class VacancyService {
                 .setExperience(responseDto.getExperience().getName())
                 .setKeySkills(builder.toString())
                 .setEmployment(responseDto.getEmployment().getName())
-                .setDescription(responseDto.getDescription()));
+                .setDescription(responseDto.getDescription())
+                .setEmployerDescription(hhEmployerDto.getDescription())
+                .setStatus(VacancyStatus.PARSED)
+        );
     }
 
     //Сохранение сгенерированного описания вакансии, посредством обращения к OpenAI API
@@ -79,11 +90,14 @@ public class VacancyService {
         String generatedDescription = openAiApiFeignService
                 .generateDescription(vacancy.getDescription());
         //Обновление и сохранение данных вакансии
-        vacancyRepository.save(vacancy.setGeneratedDescription(generatedDescription));
+        vacancyRepository.save(vacancy
+                .setGeneratedDescription(generatedDescription)
+                .setStatus(VacancyStatus.PROCESSED)
+        );
     }
 
-    public String fetchGenerateCoverLetter(Long vacancyHhId) {
-        Optional<Vacancy> vacancyOptional = vacancyRepository.findByHhIdAndDescriptionNotNull(vacancyHhId);
+    public String fetchGenerateCoverLetter(Long vacancyId, String userInfo) {
+        Optional<Vacancy> vacancyOptional = vacancyRepository.findByIdAndDescriptionNotNull(vacancyId);
         if (vacancyOptional.isPresent()) {
             Vacancy vacancy = vacancyOptional.get();
             //Получение сгенерированного сопроводительного письма, на основе полного описания
@@ -91,10 +105,18 @@ public class VacancyService {
             builder.append("Ключевые навыки: ").append(vacancy.getKeySkills()).append("\n");
             builder.append(vacancy.getDescription());
             String coverLetter = openAiApiFeignService
-                    .generateCoverLetter(builder.toString());
+                    .generateCoverLetter(builder.toString(),
+                            userInfo, vacancy.getEmployerDescription());
             return coverLetter;
         }
         return null;
+    }
 
+    public void updateStatusById(Long vacancyId, VacancyStatus vacancyStatus) {
+        vacancyRepository.updateStatusById(vacancyId, vacancyStatus);
+    }
+
+    public void vacancyRejectById(long vacancyId) {
+        vacancyRepository.updateStatusById(vacancyId, VacancyStatus.REJECTED);
     }
 }

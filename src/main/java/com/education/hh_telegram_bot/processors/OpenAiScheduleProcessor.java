@@ -1,6 +1,7 @@
 package com.education.hh_telegram_bot.processors;
 
 import com.education.hh_telegram_bot.entities.Vacancy;
+import com.education.hh_telegram_bot.entities.VacancyStatus;
 import com.education.hh_telegram_bot.services.VacancyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +15,12 @@ import java.util.List;
 @Slf4j
 public class OpenAiScheduleProcessor implements ScheduleProcessor {
     private final VacancyService vacancyService;
-    private final int MAX_EXCEPTION = 3;
+    private final static int MAX_EXCEPTION = 3;
 
     @Override
     public void process() {
         //Получение вакансий без сгенерированного описания
-        List<Vacancy> vacancyList = vacancyService.getAllUngeneratedVacancies();
+        List<Vacancy> vacancyList = vacancyService.getAllByVacancyStatus(VacancyStatus.PARSED);
 
         //Счетчик ошибок
         int countException = 0;

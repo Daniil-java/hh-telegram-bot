@@ -1,7 +1,9 @@
 package com.education.hh_telegram_bot.services;
 
 import com.education.hh_telegram_bot.entities.Vacancy;
+import com.education.hh_telegram_bot.entities.VacancyStatus;
 import com.education.hh_telegram_bot.telegram.TelegramBot;
+import com.education.hh_telegram_bot.telegram.handlers.CallbackHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ public class TelegramService {
     private final TelegramBot telegramBot;
 
     public Message sendReturnedMessage(long chatId, String text,
-                                       InlineKeyboardMarkup inlineKeyboardMarkup, int replyMessageId) {
+                                       InlineKeyboardMarkup inlineKeyboardMarkup, Integer replyMessageId) {
         return telegramBot.sendReturnedMessage(
                 SendMessage.builder()
                         .chatId(chatId)
@@ -39,21 +41,25 @@ public class TelegramService {
         return telegramBot.sendReturnedMessage(SendMessage.builder()
                 .chatId(chatId)
                 .text(vacancyToFormattedString(vacancy))
-                .replyMarkup(getInlineMessageButtonLetterGenerate(vacancy.getHhId()))
+                .replyMarkup(getInlineMessageButtonLetterGenerate(vacancy.getId()))
                 .parseMode(ParseMode.HTML)
                 .disableWebPagePreview(true)
                 .build());
     }
 
     private InlineKeyboardMarkup getInlineMessageButtonLetterGenerate(long vacancyId) {
+        String callbackCommand = CallbackHandler.REQUEST_COMMAND;
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton generateButton =
-                new InlineKeyboardButton("Сгенерировать сопроводительное письмо");
-        generateButton.setCallbackData("coverLetter" + vacancyId);
+                new InlineKeyboardButton("Принять");
+        InlineKeyboardButton rejectButton =
+                new InlineKeyboardButton("Отклонить");
+        generateButton.setCallbackData(callbackCommand + " " + VacancyStatus.APPLIED.name() + vacancyId);
+        rejectButton.setCallbackData(callbackCommand + " " + VacancyStatus.REJECTED.name() + vacancyId);
 
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-        rowList.add(Arrays.asList(generateButton));
+        rowList.add(Arrays.asList(generateButton, rejectButton));
 
         inlineKeyboardMarkup.setKeyboard(rowList);
         return inlineKeyboardMarkup;

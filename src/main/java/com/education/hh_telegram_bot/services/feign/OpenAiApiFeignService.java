@@ -30,10 +30,24 @@ public class OpenAiApiFeignService {
         return response.getChoices().get(0).getMessage().getContent();
     }
 
-    public String generateCoverLetter(String description) {
+    public String generateCoverLetter(String vacancyDescription, String userInfo, String companyDescription) {
         //Создание текста запроса для обращение к OpenAI API
         String request = String.format(
-                "Напиши сопроводительное письмо для следующей вакансии: ", description);
+                "Помоги мне составить сопроводительное письмо для заявки на работу. " +
+                        "Заявка найдена на сайте по поиску вакансий. " +
+                        "Используй следующую информацию:\n" +
+                        "\n" +
+                        "1. Описание вакансии: %s\n" +
+                        "2. Описание компании : %s\n" +
+                        "3. Информация о соискателе: %s\n" +
+                        "\n" +
+                        "Требования к письму:\n" +
+                        "- Письмо должно быть написано как реклама соискателя, подчеркивая совпадения навыков с требованиями вакансии.\n" +
+                        "- Укажите, что я провел исследование компании и понимаю ее цели и ценности.\n" +
+                        "- Письмо должно быть кратким, четким и профессиональным.\n" +
+                        "- Необязательно использовать всю информацию о пользователе. " +
+                        "Попробуй сгладить информацию пользователя, если это необходимо"
+                , vacancyDescription, companyDescription, userInfo);
         //Отправка запроса и получение ответа от ИИ
         OpenAiChatCompletionResponse response = openAiFeignClient.generate(
                 "Bearer " + openAiKeyConfiguration.getKey(),

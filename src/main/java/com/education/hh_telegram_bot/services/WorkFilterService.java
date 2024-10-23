@@ -18,11 +18,14 @@ public class WorkFilterService {
     private final WorkFilterRepository workFilterRepository;
     private final HhApiService hhApiService;
 
-    public WorkFilter save(Long userId, String url) {
-        return workFilterRepository.save(new WorkFilter()
-                .setUser(new UserEntity().setId(userId))
-                .setUrl(url)
-        );
+    public WorkFilter create(UserEntity userEntity, String url) {
+        return workFilterRepository.findByUserAndUrl(userEntity, url)
+                .orElseGet(() -> workFilterRepository.save(
+                        new WorkFilter()
+                                .setUser(userEntity)
+                                .setUrl(url)
+                        )
+                );
     }
 
     public List<WorkFilter> getAllByUserId(long userId) {
