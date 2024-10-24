@@ -2,6 +2,7 @@ package com.education.hhtelegrambot.telegram.facades;
 
 import com.education.hhtelegrambot.entities.UserEntity;
 import com.education.hhtelegrambot.services.UserService;
+import com.education.hhtelegrambot.telegram.handlers.DefaultUpdateHandler;
 import com.education.hhtelegrambot.telegram.handlers.UpdateHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,7 @@ public class MessageFacade {
             request = update.getMessage().getText();
         }
         UpdateHandler currentUpdateHandler = map.get(request.split(" ")[0]);
-        return currentUpdateHandler == null ? map.get(null) : currentUpdateHandler;
+        return currentUpdateHandler == null ? map.get(DefaultUpdateHandler.HANDLER_NAME) : currentUpdateHandler;
 
     }
 }

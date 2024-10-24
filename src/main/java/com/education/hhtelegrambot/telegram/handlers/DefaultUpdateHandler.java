@@ -18,6 +18,7 @@ public class DefaultUpdateHandler implements UpdateHandler {
     private TelegramService telegramService;
     private final static String RESPONSE_SUCCESS = "Ссылка сохранена";
     private final static String RESPONSE_FAIL = "Произошла ошибка";
+    public final static String HANDLER_NAME = "/defaultHandler";
     @Override
     public void handle(Update update, UserEntity userEntity) {
         Message message = update.getMessage();
@@ -47,6 +48,6 @@ public class DefaultUpdateHandler implements UpdateHandler {
 
     @Override
     public String getHandlerListName() {
-        return null;
+        return HANDLER_NAME;
     }
 }
