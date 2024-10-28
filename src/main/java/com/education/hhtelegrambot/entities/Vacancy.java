@@ -1,6 +1,6 @@
 package com.education.hhtelegrambot.entities;
 
-import com.education.hhtelegrambot.entities.hh.HhResponseDto;
+import com.education.hhtelegrambot.dtos.hh.HhResponseDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

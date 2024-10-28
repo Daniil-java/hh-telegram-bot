@@ -1,4 +1,4 @@
-package com.education.hhtelegrambot.entities.hh;
+package com.education.hhtelegrambot.dtos.hh;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

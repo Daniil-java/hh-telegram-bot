@@ -2,7 +2,7 @@ package com.education.hhtelegrambot.services;
 
 import com.education.hhtelegrambot.entities.WorkFilter;
 import com.education.hhtelegrambot.entities.UserEntity;
-import com.education.hhtelegrambot.entities.hh.HhSimpleResponseDto;
+import com.education.hhtelegrambot.dtos.hh.HhSimpleResponseDto;
 import com.education.hhtelegrambot.repositories.WorkFilterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

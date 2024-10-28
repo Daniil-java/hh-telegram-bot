@@ -1,8 +1,8 @@
 package com.education.hhtelegrambot.services.feign;
 
 import com.education.hhtelegrambot.configurations.OpenAiKeyConfiguration;
-import com.education.hhtelegrambot.entities.openai.OpenAiChatCompletionRequest;
-import com.education.hhtelegrambot.entities.openai.OpenAiChatCompletionResponse;
+import com.education.hhtelegrambot.dtos.openai.OpenAiChatCompletionRequest;
+import com.education.hhtelegrambot.dtos.openai.OpenAiChatCompletionResponse;
 import com.education.hhtelegrambot.integrations.OpenAiFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

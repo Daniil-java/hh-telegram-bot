@@ -2,7 +2,7 @@ package com.education.hhtelegrambot.processors;
 
 
 import com.education.hhtelegrambot.entities.WorkFilter;
-import com.education.hhtelegrambot.entities.hh.HhSimpleResponseDto;
+import com.education.hhtelegrambot.dtos.hh.HhSimpleResponseDto;
 import com.education.hhtelegrambot.services.VacancyService;
 import com.education.hhtelegrambot.services.WorkFilterService;
 import com.education.hhtelegrambot.utils.ThreadUtil;

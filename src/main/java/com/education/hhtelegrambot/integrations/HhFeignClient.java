@@ -1,7 +1,7 @@
 package com.education.hhtelegrambot.integrations;
 
-import com.education.hhtelegrambot.entities.hh.HhEmployerDto;
-import com.education.hhtelegrambot.entities.hh.HhResponseDto;
+import com.education.hhtelegrambot.dtos.hh.HhEmployerDto;
+import com.education.hhtelegrambot.dtos.hh.HhResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 

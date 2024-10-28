@@ -1,9 +1,9 @@
 package com.education.hhtelegrambot.services;
 
 import com.education.hhtelegrambot.entities.WorkFilter;
-import com.education.hhtelegrambot.entities.hh.HhEmployerDto;
-import com.education.hhtelegrambot.entities.hh.HhResponseDto;
-import com.education.hhtelegrambot.entities.hh.HhSimpleResponseDto;
+import com.education.hhtelegrambot.dtos.hh.HhEmployerDto;
+import com.education.hhtelegrambot.dtos.hh.HhResponseDto;
+import com.education.hhtelegrambot.dtos.hh.HhSimpleResponseDto;
 import com.education.hhtelegrambot.integrations.HhFeignClient;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.education.hhtelegrambot.entities.openai;
+package com.education.hhtelegrambot.dtos.openai;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -22,7 +22,7 @@ public class OpenAiChatCompletionRequest {
         );
 
         return new OpenAiChatCompletionRequest()
-                .setModel("gpt-3.5-turbo")
+                .setModel("gpt-4o-mini")
                 .setMessages(messages)
                 .setTemperature(0.7f);
     }

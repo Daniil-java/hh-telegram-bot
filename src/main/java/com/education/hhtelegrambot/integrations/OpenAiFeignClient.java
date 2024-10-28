@@ -1,7 +1,7 @@
 package com.education.hhtelegrambot.integrations;
 
-import com.education.hhtelegrambot.entities.openai.OpenAiChatCompletionRequest;
-import com.education.hhtelegrambot.entities.openai.OpenAiChatCompletionResponse;
+import com.education.hhtelegrambot.dtos.openai.OpenAiChatCompletionRequest;
+import com.education.hhtelegrambot.dtos.openai.OpenAiChatCompletionResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,4 +1,4 @@
-package com.education.hhtelegrambot.entities.openai;
+package com.education.hhtelegrambot.dtos.openai;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
