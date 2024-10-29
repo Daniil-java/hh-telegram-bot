@@ -20,7 +20,7 @@ public class OpenAiApiFeignService {
         String request = String.format(
                 "Я отправляю тебе описание вакансии. " +
                 "Сократи описание, передай основные моменты. " +
-                "Составляй сообщение от лица компании ", description);
+                "Составляй сообщение от лица компании: \n %s", description);
         //Отправка запроса и получение ответа от ИИ
         OpenAiChatCompletionResponse response = openAiFeignClient.generate(
                         "Bearer " + openAiKeyConfiguration.getKey(),
