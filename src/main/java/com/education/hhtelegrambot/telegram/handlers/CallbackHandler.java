@@ -30,16 +30,16 @@ public class CallbackHandler implements UpdateHandler {
         String callbackData = callbackQuery.getData();
 
         String decision = callbackData.split(" ")[1];
-        if (decision.equals(APPLIED_COMMAND)) {
-            long vacancyId = Long.parseLong(callbackData.substring(APPLIED_COMMAND.length()));
+        if (decision.startsWith(APPLIED_COMMAND)) {
+            long vacancyId = Long.parseLong(decision.substring(APPLIED_COMMAND.length()));
             String coverLetter = vacancyService.fetchGenerateCoverLetter(vacancyId, userEntity.getInfo());
             //Отправка сообщения пользователю и обработка, в случае удачного отправления
             if (telegramService.sendReturnedMessage(chatId, coverLetter,
                     null, messageId) != null) {
                 vacancyService.updateStatusById(vacancyId, VacancyStatus.APPLIED);
             }
-        } else if (decision.equals(REJECTED_COMMAND)) {
-            long vacancyId = Long.parseLong(callbackData.substring(REJECTED_COMMAND.length()));
+        } else if (decision.startsWith(REJECTED_COMMAND)) {
+            long vacancyId = Long.parseLong(decision.substring(REJECTED_COMMAND.length()));
             vacancyService.vacancyRejectById(vacancyId);
         }
     }
